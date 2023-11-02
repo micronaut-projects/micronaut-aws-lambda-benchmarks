@@ -10,7 +10,7 @@ import static io.gatling.javaapi.http.HttpDsl.status;
 
 public class HelloWorldSimulation extends Simulation {
     private static final Integer DURATION = 30;
-    private static final Integer USERS = 30;
+    private static final Integer USERS = 50;
 
     private static final String API_URI = "API_URL";
     private static final String TEST_SUITE = "TEST_SUITE";

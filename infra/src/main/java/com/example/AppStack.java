@@ -18,6 +18,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AppStack extends Stack {
+    public static final String CONTROLLER_V1_HANDLER = "com.example.ApiGatewayProxyRequestEventFunction";//"io.micronaut.function.aws.proxy.payload1.ApiGatewayProxyRequestEventFunction";
+
+    public static final String HANDLER = "com.example.FunctionRequestHandler";
 
     public AppStack(final Construct parent, final String id) {
         this(parent, id, null);
@@ -25,19 +28,22 @@ public class AppStack extends Stack {
 
     public AppStack(final Construct parent, final String id, final StackProps props) {
         super(parent, id, props);
-
-        createFunctionAndApi( "controller-java-jacksondatabind", false, false);
-        createFunctionAndApi( "controller-java-snapstart-jacksondatabind", false, true);
+        createFunctionAndApi( "controller-java-jacksondatabind", CONTROLLER_V1_HANDLER, false, false);
+        createFunctionAndApi( "controller-java-snapstart-jacksondatabind", CONTROLLER_V1_HANDLER, false, true);
+        createFunctionAndApi( "handler-java-snapstart-jacksondatabind", HANDLER, false, true);
     }
 
-    void createFunctionAndApi(String functionId, boolean optimized, boolean snapstart) {
+    void createFunctionAndApi(String functionId,
+                              String handler,
+                              boolean optimized,
+                              boolean snapstart) {
         Map<String, String> environmentVariables = new HashMap<>();
         Function function = MicronautFunction.create(ApplicationType.DEFAULT,
                 false,
                 this,
                         functionId)
                 .runtime(Runtime.JAVA_17)
-                .handler("io.micronaut.function.aws.proxy.payload1.ApiGatewayProxyRequestEventFunction")
+                .handler(handler)
                 .environment(environmentVariables)
                 .code(Code.fromAsset(functionPath(functionId, optimized)))
                 .timeout(Duration.seconds(10))
@@ -52,7 +58,7 @@ public class AppStack extends Stack {
 
         String apiId = functionId + "-api";
         LambdaRestApi api = LambdaRestApi.Builder.create(this, apiId)
-                .handler(snapstart ? aliasToCurrentVersion(function) : function)
+                .handler(snapstart ? aliasToCurrentVersion(functionId, function) : function)
                 .build();
         String apiUrl = functionId + "-url";
         CfnOutput.Builder.create(this, apiUrl)
@@ -61,9 +67,9 @@ public class AppStack extends Stack {
                 .build();
     }
 
-    IFunction aliasToCurrentVersion(Function function) {
+    IFunction aliasToCurrentVersion(String functionId, Function function) {
         Version currentVersion = function.getCurrentVersion();
-        return Alias.Builder.create(this, "ProdAlias")
+        return Alias.Builder.create(this, functionId + "ProdAlias")
                 .aliasName("Prod")
                 .version(currentVersion)
                 .build();

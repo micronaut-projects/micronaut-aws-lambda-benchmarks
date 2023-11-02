@@ -4,3 +4,16 @@
 # Ignore Gradle build output directory
 build
 .idea
+/infra/cdk.out/asset.0875a056336909d83a03de319779aef8195de5f5f36a3e10485a963afcc0bfed.jar
+/infra/cdk.out/asset.2e35e6b2d727fb3df46fb1d874ac835150fa08a5be89ffda9b216b35c82f1fd4.jar
+/infra/cdk.out/asset.3c85f50c973eade7552a9766b8dab4e0a5e70264d36c2b097d7b7d43bbef2d71.jar
+/infra/cdk.out/asset.5cc92ed0cea39e2b8de2dbc527dfb5980a3af9564bd1084d840b9787c7d0467e
+/infra/cdk.out/asset.64f244656220f177cf98f4d20c2e8153b8d31467d28893b2a5df1f71699f124a.jar
+/infra/cdk.out/asset.6f59bff1ed74e0de28e6c701869a99182bf1ae18444fd6e286533954748cb100.jar
+/infra/cdk.out/asset.95e4d7bf737ec1e55ec5357d1d881a0f3b15afb0d8a3904f7406c77ac5e584d4.jar
+/infra/cdk.out/asset.95fed68ce10e462022fe2d3e51827819c936781dfe15d0990abd397e879ecad0.jar
+/infra/cdk.out/asset.ec76503f2625500804ca2d13c00a0d63a574f49cdf4719e43df94a478354393d.jar
+/infra/cdk.out/asset.f7027e0626822423aeb46f7c0647d01bd720e3862be2708090f5079588ccc9c8.jar
+/infra/cdk.out/cdk.out
+/infra/cdk.out/manifest.json
+infra/cdk.out
