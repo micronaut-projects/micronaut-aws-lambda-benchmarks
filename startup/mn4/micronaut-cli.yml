@@ -1,0 +1,6 @@
+applicationType: default
+defaultPackage: mn4
+testFramework: junit
+sourceLanguage: java
+buildTool: gradle_kotlin
+features: [amazon-api-gateway, app-name, arm, aws-lambda, aws-lambda-events-serde, aws-lambda-handler-default, gradle, http-client-test, java, java-application, junit, logback, micronaut-aot, micronaut-build, micronaut-http-validation, properties, readme, serialization-jackson, shade]

@@ -39,8 +39,12 @@ class InvocationNextTest {
         String requestId = response.getHeaders().get(LAMBDA_RUNTIME_AWS_REQUEST_ID);
         assertNotNull(requestId);
 
-        // send a response
+        response = assertDoesNotThrow(() ->
+                client.exchange(HttpRequest.GET(invocationBuilder().path("next").build()), APIGatewayProxyRequestEvent.class));
+        assertEquals(HttpStatus.NO_CONTENT, noContentResponse.getStatus());
 
+
+        // send a response
         URI invocationResponseUri = invocationBuilder().path(requestId).path("response").build();
         APIGatewayProxyResponseEvent proxyResponseEvent = new APIGatewayProxyResponseEvent();
         proxyResponseEvent.setStatusCode(HttpStatus.OK.getCode());

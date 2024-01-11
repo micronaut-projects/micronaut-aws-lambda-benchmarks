@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Controller
 class RuntimeController {
@@ -22,6 +23,8 @@ class RuntimeController {
     public static final String PATH = "/";
 
     private final APIGatewayProxyRequestEvent event;
+
+    private AtomicBoolean eventInvoked = new AtomicBoolean(false);
 
     private Map<String, APIGatewayProxyResponseEvent> responses = new ConcurrentHashMap<>();
     RuntimeController() {
@@ -33,9 +36,13 @@ class RuntimeController {
 
     @Get("/2018-06-01/runtime/invocation/next")
     HttpResponse<?> nextInvocation() {
-        return HttpResponse.ok(event)
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
-                .header(LAMBDA_RUNTIME_AWS_REQUEST_ID, AWS_REQUEST_ID);
+        if (!eventInvoked.get()) {
+            eventInvoked.set(true);
+            return HttpResponse.ok(event)
+                    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
+                    .header(LAMBDA_RUNTIME_AWS_REQUEST_ID, AWS_REQUEST_ID);
+        }
+        return HttpResponse.noContent();
     }
 
     @Post("/2018-06-01/runtime/invocation/{requestId}/response")
@@ -51,4 +58,13 @@ class RuntimeController {
         }
         return HttpResponse.ok(responses.get(requestId).getBody());
     }
+
+    @Delete("/response")
+    HttpResponse<?> delete() {
+        responses.clear();
+        eventInvoked.set(false);
+        return HttpResponse.accepted();
+    }
+
+
 }
