@@ -33,6 +33,7 @@ public class AppStack extends Stack {
         createFunctionAndApi( "controller-java-snapstart-jacksondatabind", CONTROLLER_V1_HANDLER, false, true);
         createFunctionAndApi( "handler-java-snapstart-jacksondatabind", HANDLER, false, true);
         createFunctionAndApi( "handler-java-jacksondatabind", HANDLER, false, false);
+        createFunctionAndApi( "handler-java-serde", HANDLER, false, false);
     }
 
     void createFunctionAndApi(String functionId,
