@@ -18,7 +18,9 @@ dependencies {
     implementation("io.micronaut.crac:micronaut-crac")
     runtimeOnly("ch.qos.logback:logback-classic")
 }
-
+application {
+    mainClass.set("com.example.Application")
+}
 
 java {
     sourceCompatibility = JavaVersion.toVersion("17")
