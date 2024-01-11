@@ -49,7 +49,7 @@ public class AppStack extends Stack {
                 .timeout(Duration.seconds(10))
                 .memorySize(2048)
                 .logRetention(RetentionDays.ONE_WEEK)
-                .tracing(Tracing.DISABLED)
+                .tracing(snapstart ? Tracing.DISABLED : Tracing.ACTIVE)
                 .architecture(Architecture.X86_64)
                 .build();
         if (snapstart) {
