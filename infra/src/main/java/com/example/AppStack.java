@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AppStack extends Stack {
-    public static final String CONTROLLER_V1_HANDLER = "com.example.ApiGatewayProxyRequestEventFunction";//"io.micronaut.function.aws.proxy.payload1.ApiGatewayProxyRequestEventFunction";
+    public static final String CONTROLLER_V1_HANDLER = "io.micronaut.function.aws.proxy.MicronautLambdaHandler";
 
     public static final String HANDLER = "com.example.FunctionRequestHandler";
 
