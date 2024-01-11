@@ -1,7 +1,8 @@
 package com.example;
-import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
-import io.micronaut.function.aws.proxy.payload1.ApiGatewayProxyRequestEventFunction;
-import io.micronaut.function.aws.proxy.MockLambdaContext;
+import com.amazonaws.serverless.exceptions.ContainerInitializationException;
+import com.amazonaws.serverless.proxy.model.AwsProxyRequest;
+import io.micronaut.function.aws.proxy.MicronautLambdaHandler;
+import com.amazonaws.serverless.proxy.internal.testutils.MockLambdaContext;
 import io.micronaut.http.HttpMethod;
 import io.micronaut.http.HttpStatus;
 import org.junit.jupiter.api.AfterAll;
@@ -11,11 +12,11 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class HomeControllerTest {
-    private static ApiGatewayProxyRequestEventFunction handler;
+    private static MicronautLambdaHandler handler;
 
     @BeforeAll
-    static void setupSpec() {
-        handler = new ApiGatewayProxyRequestEventFunction();
+    static void setupSpec() throws ContainerInitializationException {
+        handler = new MicronautLambdaHandler();
     }
     @AfterAll
     static void cleanupSpec() {
@@ -24,7 +25,7 @@ class HomeControllerTest {
 
     @Test
     void testHandler() {
-        APIGatewayProxyRequestEvent request = new APIGatewayProxyRequestEvent();
+        AwsProxyRequest request = new AwsProxyRequest();
         request.setPath("/");
         request.setHttpMethod(HttpMethod.GET.toString());
         var response = handler.handleRequest(request, new MockLambdaContext());
