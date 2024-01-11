@@ -49,6 +49,8 @@ fi
 
 echo "runtime started with PID: $RUNTIME_PID"
 
+export MICRONAUT_ENVIRONMENTS=ec2,cloud,function,lambda
+
 echo "running Micronaut 4 Handler"
 cd mn4
 start_time=$(gdate +%s%N)
