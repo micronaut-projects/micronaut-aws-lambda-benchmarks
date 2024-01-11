@@ -7,6 +7,10 @@ cd mn4
 ./gradlew shadowJar
 cd ..
 
+cd mn4serde
+./gradlew shadowJar
+cd ..
+
 cd mn3
 ./gradlew shadowJar
 cd ..
@@ -72,6 +76,35 @@ response=$(curl -s -o /dev/null -w "%{http_code}" -X DELETE "http://localhost:${
 if [ "$response" -eq 202 ]; then
     echo "HTTP 202 response received. Responses cleared."
 fi
+
+echo "running Micronaut 4 Handler with Micronaut Serialization"
+cd mn4serde
+start_time=$(gdate +%s%N)
+
+java -jar build/libs/handler-0.1-all.jar -o /dev/null &
+HANDLER_PID=$!
+echo "hanlder started with PID: $HANDLER_PID"
+
+while true; do
+  response=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:${PORT}/response/123456")
+  if [ "$response" -eq 200 ]; then
+    echo "HTTP 200 response received. Exiting loop."
+    break
+  fi
+  sleep 0.001;
+done
+end_time=$(gdate +%s%N)
+elapsed_time=$(( (end_time - start_time) / 1000000 ))
+
+echo "Micronaut 4 with Micronaut Serialization - Total execution time: $elapsed_time milliseconds"
+kill -9 $HANDLER_PID
+cd ..
+
+response=$(curl -s -o /dev/null -w "%{http_code}" -X DELETE "http://localhost:${PORT}/response")
+if [ "$response" -eq 202 ]; then
+    echo "HTTP 202 response received. Responses cleared."
+fi
+
 echo "running Micronaut 3 Handler"
 cd mn3
 start_time=$(gdate +%s%N)
