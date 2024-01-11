@@ -29,6 +29,7 @@ public class AppStack extends Stack {
     public AppStack(final Construct parent, final String id, final StackProps props) {
         super(parent, id, props);
         createFunctionAndApi( "controller-java-jacksondatabind", CONTROLLER_V1_HANDLER, false, false);
+        createFunctionAndApi( "controller-java-serde", CONTROLLER_V1_HANDLER, false, false);
         createFunctionAndApi( "controller-java-snapstart-jacksondatabind", CONTROLLER_V1_HANDLER, false, true);
         createFunctionAndApi( "handler-java-snapstart-jacksondatabind", HANDLER, false, true);
     }
