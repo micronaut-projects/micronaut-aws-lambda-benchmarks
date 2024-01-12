@@ -13,7 +13,7 @@ repositories {
 dependencies {
     annotationProcessor("io.micronaut.serde:micronaut-serde-processor")
     implementation("io.micronaut.serde:micronaut-serde-jackson")
-    implementation("io.micronaut.aws:micronaut-aws-lambda-events-serde")
+    implementation("com.amazonaws:aws-lambda-java-events")
 
     implementation("io.micronaut.aws:micronaut-aws-apigateway")
     implementation("io.micronaut.aws:micronaut-function-aws")
