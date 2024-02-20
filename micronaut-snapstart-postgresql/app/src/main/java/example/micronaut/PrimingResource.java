@@ -1,10 +1,10 @@
 package example.micronaut;
 
-//import io.micronaut.crac.OrderedResource;
+import io.micronaut.crac.OrderedResource;
 import io.micronaut.json.JsonMapper;
 import jakarta.inject.Singleton;
-//import org.crac.Context;
-//import org.crac.Resource;
+import org.crac.Context;
+import org.crac.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,21 +24,20 @@ class PrimingResource { // implements OrderedResource  {
         this.messageRepository = messageRepository;
     }
 
-    //@Override
-//    public void beforeCheckpoint(Context<? extends Resource> context) throws Exception {
-//        List<Long> ids = new ArrayList<>();
-//        LOG.info("saving 1000 messages and then deleting them to primer the function");
-//        for (int i = 0; i < 1000; i++) {
-//            APIGatewayProxyResponseEventUtils.responseWith(jsonMapper, Collections.singletonMap("message", "Hello Moon"));
-//            ids.add(messageRepository.save(new Message(null, null, "Foo")).id());
-//        }
-//        for (Long id : ids) {
-//            messageRepository.deleteById(id);
-//        }
-//    }
+    @Override
+    public void beforeCheckpoint(Context<? extends Resource> context) throws Exception {
+        List<Long> ids = new ArrayList<>();
+        LOG.info("saving 1000 messages and then deleting them to primer the function");
+        for (int i = 0; i < 1000; i++) {
+            APIGatewayProxyResponseEventUtils.responseWith(jsonMapper, Collections.singletonMap("message", "Hello Moon"));
+            ids.add(messageRepository.save(new Message(null, null, "Foo")).id());
+        }
+        for (Long id : ids) {
+            messageRepository.deleteById(id);
+        }
+    }
 
-    //@Override
-//    public void afterRestore(Context<? extends Resource> context) throws Exception {
-//
-//    }
+    @Override
+    public void afterRestore(Context<? extends Resource> context) throws Exception {
+    }
 }

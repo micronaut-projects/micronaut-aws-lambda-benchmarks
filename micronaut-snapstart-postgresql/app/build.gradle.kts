@@ -27,7 +27,7 @@ dependencies {
     implementation("io.micronaut.aws:micronaut-function-aws")
 
     // CRaC
-    //implementation("io.micronaut.crac:micronaut-crac")
+    implementation("io.micronaut.crac:micronaut-crac")
 
     // Logback
     runtimeOnly("ch.qos.logback:logback-classic")

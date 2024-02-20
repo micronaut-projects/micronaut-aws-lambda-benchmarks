@@ -49,7 +49,6 @@ public class AppStack extends Stack {
                 "micronaut-function")
                 .runtime(Runtime.JAVA_21)
                 .role(lambdaRole)
-                .runtime(Runtime.PROVIDED_AL2023)
                 .handler("example.micronaut.FunctionRequestHandler")
                 .environment(environmentVariables)
                 .code(Code.fromAsset(functionPath()))
@@ -57,7 +56,7 @@ public class AppStack extends Stack {
                 .memorySize(2048)
                 .logRetention(RetentionDays.ONE_WEEK)
                 .tracing(Tracing.ACTIVE)
-                //.snapStart(SnapStartConf.ON_PUBLISHED_VERSIONS)
+                .snapStart(SnapStartConf.ON_PUBLISHED_VERSIONS)
                 .architecture(Architecture.X86_64);
         if (props != null) {
             functionBuilder.securityGroups(List.of(props.getLambdaSG()))
@@ -67,13 +66,12 @@ public class AppStack extends Stack {
         Function function = functionBuilder.build();
 
         Version currentVersion = function.getCurrentVersion();
-//        Alias prodAlias = Alias.Builder.create(this, "ProdAlias")
-//                .aliasName("Prod")
-//                .version(currentVersion)
-//                .build();
+        Alias prodAlias = Alias.Builder.create(this, "ProdAlias")
+                .aliasName("Prod")
+                .version(currentVersion)
+                .build();
         LambdaRestApi api = LambdaRestApi.Builder.create(this, "micronaut-function-api")
-                //.handler(prodAlias)
-                .handler(function)
+                .handler(prodAlias)
                 .build();
         CfnOutput.Builder.create(this, "MnTestApiUrl")
                 .exportName("MnTestApiUrl")
