@@ -17,13 +17,22 @@ public class Main {
                 .env(environment)
                 .build());
 
-        new AppStack(app, "MicronautSnapstartPostgresqlStack", AppStackProps.builder()
+        new AppStack(app, "MicronautSnapstartPostgresqlDbMigrationStack", builder(environment, dbStack)
+                .module("dbmigration")
+                .build());
+
+        new AppStack(app, "MicronautSnapstartPostgresqlStack", builder(environment, dbStack)
+                .module("app")
+                .build());
+        app.synth();
+    }
+
+    private static AppStackProps.Builder builder(Environment environment, DatabaseStack dbStack) {
+        return AppStackProps.builder()
                 .env(environment)
                 .rdsProxyEndpoint(dbStack.getRdsProxyEndpoint())
                 .rdsSecretArn(dbStack.getRdsSecretArn())
                 .lambdaSG(dbStack.getLambdaSecurityGroup())
-                .vpc(dbStack.getVpc())
-                .build());
-        app.synth();
+                .vpc(dbStack.getVpc());
     }
 }

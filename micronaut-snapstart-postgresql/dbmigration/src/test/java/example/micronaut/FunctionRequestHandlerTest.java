@@ -5,8 +5,6 @@ import io.micronaut.context.ApplicationContextBuilder;
 import io.micronaut.context.env.Environment;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.util.StringUtils;
-import io.micronaut.crac.test.CheckpointSimulator;
-import io.micronaut.data.runtime.config.SchemaGenerate;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -34,7 +32,6 @@ public class FunctionRequestHandlerTest {
                 applicationContextBuilder.environments(Environment.TEST);
                 applicationContextBuilder.properties(
                 Map.of(
-                        "datasources.default.schema-generate", SchemaGenerate.CREATE,
                         "micronaut.config-client.enabled", StringUtils.FALSE,
                         "datasources.default.url", postgres.getJdbcUrl(),
                         "datasources.default.username", postgres.getUsername(),
@@ -56,23 +53,11 @@ public class FunctionRequestHandlerTest {
     }
 
     @Test
-    public void testHandler() throws IOException {
+    public void testHandler() {
         APIGatewayProxyRequestEvent request = new APIGatewayProxyRequestEvent();
-        request.setHttpMethod("POST");
+        request.setHttpMethod("GET");
         request.setPath("/");
-        request.setBody("{\"message\":\"Hello World\"}");
         APIGatewayProxyResponseEvent response = handler.execute(request);
         assertEquals(200, response.getStatusCode().intValue());
-        assertEquals("{\"message\":\"Hello Moon\"}", response.getBody());
-        assertEquals(1, count(handler));
-        CheckpointSimulator checkpointSimulator = handler.getApplicationContext().getBean(CheckpointSimulator.class);
-        checkpointSimulator.runBeforeCheckpoint();
-        checkpointSimulator.runAfterRestore();
-        assertEquals(1, count(handler));
-        handler.getApplicationContext().getBean(MessageRepository.class).deleteAll();
-    }
-
-    long count(FunctionRequestHandler handler) {
-        return handler.getApplicationContext().getBean(MessageRepository.class).count();
     }
 }

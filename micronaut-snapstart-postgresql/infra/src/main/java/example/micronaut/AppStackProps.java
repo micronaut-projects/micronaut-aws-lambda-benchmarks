@@ -13,6 +13,7 @@ public class AppStackProps implements StackProps {
   private String rdsProxyEndpoint;
   private String rdsSecretArn;
   private Environment env;
+  private String module;
 
     public Vpc getVpc() {
         return vpc;
@@ -46,6 +47,10 @@ public class AppStackProps implements StackProps {
         this.rdsSecretArn = rdsSecretArn;
     }
 
+    public void setModule(String module) {
+        this.module = module;
+    }
+
     @Nullable
     @Override
     public Environment getEnv() {
@@ -60,12 +65,22 @@ public class AppStackProps implements StackProps {
         return new Builder();
     }
 
-    static class Builder {
+    public String getModule() {
+        return module;
+    }
+
+    public static class Builder {
         private Vpc vpc;
         private SecurityGroup lambdaSG;
         private String rdsProxyEndpoint;
         private String rdsSecretArn;
         private Environment env;
+        private String module;
+
+        public Builder module(String module) {
+            this.module = module;
+            return this;
+        }
 
         public Builder env(Environment environment) {
             this.env = environment;
@@ -98,6 +113,7 @@ public class AppStackProps implements StackProps {
              instance.setRdsProxyEndpoint(rdsProxyEndpoint);
              instance.setRdsSecretArn(rdsSecretArn);
              instance.setLambdaSG(lambdaSG);
+             instance.setModule(module);
             return instance;
          }
     }

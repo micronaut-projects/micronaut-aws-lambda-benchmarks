@@ -11,6 +11,9 @@ repositories {
 }
 
 dependencies {
+    // Liquibase
+    implementation("io.micronaut.liquibase:micronaut-liquibase")
+
     // Micronaut Data
     annotationProcessor("io.micronaut.data:micronaut-data-processor")
     implementation("io.micronaut.data:micronaut-data-jdbc")
@@ -23,11 +26,7 @@ dependencies {
     implementation("io.micronaut.aws:micronaut-aws-lambda-events-serde")
 
     // Micronaut AWS
-    implementation("io.micronaut.aws:micronaut-aws-apigateway")
     implementation("io.micronaut.aws:micronaut-function-aws")
-
-    // CRaC
-    implementation("io.micronaut.crac:micronaut-crac")
 
     // Logback
     runtimeOnly("ch.qos.logback:logback-classic")
@@ -44,10 +43,12 @@ dependencies {
     testImplementation("org.testcontainers:testcontainers")
 }
 
+
 java {
     sourceCompatibility = JavaVersion.toVersion("21")
     targetCompatibility = JavaVersion.toVersion("21")
 }
+
 
 micronaut {
     runtime("lambda_java")

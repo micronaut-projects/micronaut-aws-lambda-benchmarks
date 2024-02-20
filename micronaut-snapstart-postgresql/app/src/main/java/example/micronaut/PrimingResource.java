@@ -1,5 +1,6 @@
 package example.micronaut;
 
+import io.micronaut.core.order.Ordered;
 import io.micronaut.crac.OrderedResource;
 import io.micronaut.json.JsonMapper;
 import jakarta.inject.Singleton;
@@ -13,7 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Singleton
-class PrimingResource { // implements OrderedResource  {
+class PrimingResource implements OrderedResource  {
     private static final Logger LOG = LoggerFactory.getLogger(PrimingResource.class);
 
     private final JsonMapper jsonMapper;
@@ -29,15 +30,22 @@ class PrimingResource { // implements OrderedResource  {
         List<Long> ids = new ArrayList<>();
         LOG.info("saving 1000 messages and then deleting them to primer the function");
         for (int i = 0; i < 1000; i++) {
+            LOG.info("saving message");
             APIGatewayProxyResponseEventUtils.responseWith(jsonMapper, Collections.singletonMap("message", "Hello Moon"));
             ids.add(messageRepository.save(new Message(null, null, "Foo")).id());
         }
         for (Long id : ids) {
+            LOG.info("deleting message with id {}", id);
             messageRepository.deleteById(id);
         }
     }
 
     @Override
     public void afterRestore(Context<? extends Resource> context) throws Exception {
+    }
+
+    @Override
+    public int getOrder() {
+        return Ordered.LOWEST_PRECEDENCE;
     }
 }
