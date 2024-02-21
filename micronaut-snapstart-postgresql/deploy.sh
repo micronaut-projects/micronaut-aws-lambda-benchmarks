@@ -18,8 +18,6 @@ cdk deploy --require-approval never --all
 cd ..
 
 STACK_NAME=MicronautSnapstartPostgresqlStack
-API_URL="$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query 'Stacks[0].Outputs[?OutputKey==`MigrationApiUrl`].OutputValue' --output text)"
-RESPONSE="$(curl -s $API_URL)"
 API_URL="$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query 'Stacks[0].Outputs[?OutputKey==`ApiUrl`].OutputValue' --output text)"
 RESPONSE="$(curl -s $API_URL)"
 EXPECTED_RESPONSE='{"message":"Hello Moon"}'
